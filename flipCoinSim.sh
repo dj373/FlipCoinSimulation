@@ -5,12 +5,21 @@ function flipCoin() {
 isHeads=1
 tailWin=0
 headWin=0
-isTie=0
 while [ $headWin -le 21 ] && [ $tailWin -le 21 ]
 do
 	if [ $headWin -eq 21 ] && [ $tailWin -eq 21 ]
 	then
-		isTie=1
+		while [ $(( $headWin-$tailWin )) -lt 2 ] && [ $(( $tailWin-$headWin )) -lt 2 ]
+		do
+			coinToss="$( flipCoin )"
+		        if [ $coinToss -eq $isHeads ]
+        		then
+                		(( headWin++ ))
+        		else
+                		(( tailWin++ ))
+        		fi
+
+		done
 		break
 	fi
         coinToss="$( flipCoin )"
@@ -21,14 +30,10 @@ do
                 (( tailWin++ ))
         fi
 done
-if [ $isTie -eq 1 ]
+if [ $headWin -gt $tailWin ]
 then
-	echo "Tie game"
+	echo "Head won by "$(( $headWin-$tailWin ))
 else
-	if [ $headWin -gt $tailWin ]
-	then
-		echo "Head won by "$(( $headWin-$tailWin ))
-	else
-		echo "Tail won by "$(( $tailWin-$headWin ))
-	fi
+	echo "Tail won by "$(( $tailWin-$headWin ))
 fi
+
